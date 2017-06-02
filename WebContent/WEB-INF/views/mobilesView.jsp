@@ -15,8 +15,7 @@
 	<jsp:include page="_menu.jsp"></jsp:include>
 	<div class="wrapper">
 		<h3>Mobiles List</h3>
-		<form action="${pageContext.request.contextPath}/mobiles"
-			method="post">
+		<form action="" method="post">
 			<button>Add new</button>
 			<input type="submit" name="importCSV" value="importCSV"> <input
 				type="submit" name="exportCSV" value="exportCSV">

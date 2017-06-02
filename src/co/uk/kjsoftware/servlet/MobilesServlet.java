@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.fabric.Response;
+
 import co.uk.kjsoftware.beans.Mobiles;
 
 import co.uk.kjsoftware.conn.MySQLConnUtils;
@@ -53,16 +55,38 @@ public class MobilesServlet extends HttpServlet {
 		try {
 			Connection conn = MySQLConnUtils.getMySQLConnection();
 			list = DBUtils.queryMobiles(conn);
-			
-			
 
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 			errorString = e.getMessage();
-		}		String button = request.getParameter("importCSV");
-		
+		}
 		
 
+
+			// Store info in request attribute, before forward to views
+			request.setAttribute("errorString", errorString);
+			request.setAttribute("mobilesList", list);
+
+			RequestDispatcher dispatcher = this.getServletContext()
+					.getRequestDispatcher("/WEB-INF/views/mobilesView.jsp");
+
+			dispatcher.forward(request, response);
+		}
+
+	
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		
+		String button = request.getParameter("importCSV");
+		String errorString = null;
+		List<Mobiles> list = null;
 		if ("importCSV".equals(button)) {
 			FileChooser filechooser = new FileChooser();
 
@@ -74,12 +98,14 @@ public class MobilesServlet extends HttpServlet {
 			try {
 				Connection conn = MySQLConnUtils.getMySQLConnection();
 				DBUtils.insertMobiles(conn);
-				response.setContentType("text/html");  
-			    PrintWriter out = response.getWriter();  
-				 out.print("Sorry UserName or Password Error!");  
-			        RequestDispatcher rd=request.getRequestDispatcher("/WEB-INF/views/mobilesView.jsp");  
-			        rd.include(request, response);  
 
+				// Store info in request attribute, before forward to views
+				//request.setAttribute("errorString", errorString);
+				//request.setAttribute("mobilesList", list);
+
+				doGet(request, response);
+				
+				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -88,27 +114,8 @@ public class MobilesServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-
-		// Store info in request attribute, before forward to views
-		request.setAttribute("errorString", errorString);
-		request.setAttribute("mobilesList", list);
-
-		RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/mobilesView.jsp");
-
-		dispatcher.forward(request, response);
-
-
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-
+		
+		
 
 		String buttonEC = request.getParameter("exportCSV");
 
@@ -119,7 +126,7 @@ public class MobilesServlet extends HttpServlet {
 		}
 
 		// read button delete value and delete row from table mobile
-		String errorString = null;
+		
 		List<Mobiles> mlist = null;
 		try {
 			Connection conn = MySQLConnUtils.getMySQLConnection();
@@ -134,13 +141,16 @@ public class MobilesServlet extends HttpServlet {
 					String idMobiles1 = idmob.getId();
 
 					DBUtils.removeIdMobile(conn, idMobiles1);
-					//response.setHeader("Refresh", " URL=http://localhost:8080/ITAssetManager/mobiles");
+					// response.setHeader("Refresh", "
+					// URL=http://localhost:8080/ITAssetManager/mobiles");
 					// Set response content type
 					// response.setHeader("Refresh", "0;
 					// URL=http://localhost:8080/ITAssetManager/mobiles");
 					// response.setIntHeader("Refresh", 1);
 					// response.setHeader("Refresh", "0;
 					// URL=http://localhost:8080/ITAssetManager/mobiles");
+					
+					doGet(request, response);
 				}
 
 			}
