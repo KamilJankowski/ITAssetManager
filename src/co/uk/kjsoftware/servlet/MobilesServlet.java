@@ -83,10 +83,8 @@ public class MobilesServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		
+		//import CSV file
 		String button = request.getParameter("importCSV");
-		String errorString = null;
-		List<Mobiles> list = null;
 		if ("importCSV".equals(button)) {
 			FileChooser filechooser = new FileChooser();
 
@@ -98,11 +96,7 @@ public class MobilesServlet extends HttpServlet {
 			try {
 				Connection conn = MySQLConnUtils.getMySQLConnection();
 				DBUtils.insertMobiles(conn);
-
-				// Store info in request attribute, before forward to views
-				//request.setAttribute("errorString", errorString);
-				//request.setAttribute("mobilesList", list);
-
+				
 				doGet(request, response);
 				
 				
@@ -116,7 +110,7 @@ public class MobilesServlet extends HttpServlet {
 		}
 		
 		
-
+		//export table mobiles  to CSV file
 		String buttonEC = request.getParameter("exportCSV");
 
 		if ("exportCSV".equals(buttonEC)) {
@@ -141,15 +135,7 @@ public class MobilesServlet extends HttpServlet {
 					String idMobiles1 = idmob.getId();
 
 					DBUtils.removeIdMobile(conn, idMobiles1);
-					// response.setHeader("Refresh", "
-					// URL=http://localhost:8080/ITAssetManager/mobiles");
-					// Set response content type
-					// response.setHeader("Refresh", "0;
-					// URL=http://localhost:8080/ITAssetManager/mobiles");
-					// response.setIntHeader("Refresh", 1);
-					// response.setHeader("Refresh", "0;
-					// URL=http://localhost:8080/ITAssetManager/mobiles");
-					
+									
 					doGet(request, response);
 				}
 
@@ -157,7 +143,6 @@ public class MobilesServlet extends HttpServlet {
 
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
-			errorString = e.getMessage();
 		}
 
 	}

@@ -21,6 +21,7 @@ import co.uk.kjsoftware.servlet.MobilesServlet;
 
 public class DBUtils {
 
+	//Select query to display mobiles table	
 	public static List<Mobiles> queryMobiles(Connection conn) throws SQLException {
 
 		String sql = "select  id_mobile, make, model, IMEI, mobiles.serial_number, provider, sim_cards.serial_number, mobile_number, users.first_name, users.last_name, department_name"
@@ -67,6 +68,7 @@ public class DBUtils {
 		return list;
 	}
 	
+	//ResultSet 
 	public static ResultSet queryMobilesResult(Connection conn) throws SQLException {
 
 		String sql = "select  make, model, IMEI, mobiles.serial_number, provider, sim_cards.serial_number, mobile_number, users.first_name, users.last_name, department_name"
@@ -79,39 +81,11 @@ public class DBUtils {
 		PreparedStatement pstm = conn.prepareStatement(sql);
 
 		ResultSet rs = pstm.executeQuery();
-		/*List<String[]> list = new ArrayList<String[]>();
 
-		while (rs.next()) {
-
-			String make = rs.getString("make");
-			String model = rs.getString("model");
-			String imei = rs.getString("IMEI");
-			String m_serial_number = rs.getString("mobiles.serial_number");
-			String provider = rs.getString("provider");
-			String s_serial_number = rs.getString("sim_cards.serial_number");
-			String mobile_number = rs.getString("mobile_number");
-			String first_name = rs.getString("first_name");
-			String last_name = rs.getString("last_name");
-			String department_name = rs.getString("department_name");
-
-			Mobiles mobile = new Mobiles();
-
-			mobile.setMake(make);
-			mobile.setModel(model);
-			mobile.setImei(imei);
-			mobile.setM_serial_number(m_serial_number);
-			mobile.setProvider(provider);
-			mobile.setS_serial_number(s_serial_number);
-			mobile.setMobile_number(mobile_number);
-			mobile.setFirst_name(first_name);
-			mobile.setLast_name(last_name);
-			mobile.setDepartment(department_name);
-
-			list.addAll((Collection<? extends String[]>) mobile);
-		}*/
 		return rs;
 	}
 	
+	//List of ids from mobiles table
 	public static List<Mobiles> queryIdMobile(Connection conn) throws SQLException {
 		String sql = "select id_mobile from mobiles";
 		
@@ -221,10 +195,11 @@ public class DBUtils {
 
 	}
 
+	//Add new mobile to mobiles table
 	public static void insertMobiles(Connection conn) throws SQLException {
 		insertUsers(conn);
 		insertMake(conn);
-		// List<HWmodel> hwmodelList = null;
+		
 		insertModel(conn);
 		insertSIM(conn);
 

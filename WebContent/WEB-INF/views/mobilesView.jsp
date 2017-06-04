@@ -54,8 +54,8 @@
 						<td>${mobiles.last_name}</td>
 						<td>${mobiles.department}</td>
 						<td><button>Edit</button></td>
-						<td><input type="submit" name="delMobileBtn"
-							value="${mobiles.id}"></td>
+						<td><button type="submit" name="delMobileBtn"
+							value="${mobiles.id}">Delete</button></td>
 
 					</tr>
 

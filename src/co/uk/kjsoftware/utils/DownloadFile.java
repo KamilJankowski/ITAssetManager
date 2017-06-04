@@ -13,7 +13,8 @@ import com.opencsv.*;
 import co.uk.kjsoftware.conn.MySQLConnUtils;
 
 public class DownloadFile {
-
+	
+	//Download data from mobiles table to c:\share\file.csv
 	public DownloadFile() throws IOException {
 
 		try {
