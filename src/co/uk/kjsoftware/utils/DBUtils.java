@@ -15,13 +15,13 @@ import co.uk.kjsoftware.beans.Pcs;
 import co.uk.kjsoftware.beans.Printers;
 import co.uk.kjsoftware.beans.SIM;
 import co.uk.kjsoftware.beans.Users;
+import co.uk.kjsoftware.servlet.AddMobileServlet;
 import co.uk.kjsoftware.servlet.MobilesServlet;
-
-
+import co.uk.kjsoftware.utils.AddMobile;
 
 public class DBUtils {
 
-	//Select query to display mobiles table	
+	// Select query to display mobiles table
 	public static List<Mobiles> queryMobiles(Connection conn) throws SQLException {
 
 		String sql = "select  id_mobile, make, model, IMEI, mobiles.serial_number, provider, sim_cards.serial_number, mobile_number, users.first_name, users.last_name, department_name"
@@ -67,8 +67,8 @@ public class DBUtils {
 		}
 		return list;
 	}
-	
-	//ResultSet 
+
+	// ResultSet
 	public static ResultSet queryMobilesResult(Connection conn) throws SQLException {
 
 		String sql = "select  make, model, IMEI, mobiles.serial_number, provider, sim_cards.serial_number, mobile_number, users.first_name, users.last_name, department_name"
@@ -84,41 +84,38 @@ public class DBUtils {
 
 		return rs;
 	}
-	
-	//List of ids from mobiles table
+
+	// List of ids from mobiles table
 	public static List<Mobiles> queryIdMobile(Connection conn) throws SQLException {
 		String sql = "select id_mobile from mobiles";
-		
+
 		PreparedStatement pstm = conn.prepareStatement(sql);
 		ResultSet rs = pstm.executeQuery();
 		List<Mobiles> list = new ArrayList<Mobiles>();
-		while(rs.next()) {
+		while (rs.next()) {
 			String id = rs.getString("id_mobile");
-			
+
 			Mobiles mobile = new Mobiles();
 			mobile.setId(id);
-			
-			list.add(mobile);
-			
-					
-		}
-		
-		return list;
-		
-	}
-	
-	public static boolean removeIdMobile(Connection conn, String idMobiles) throws SQLException {
-		
-		String sql = "delete from mobiles where id_mobile=" + idMobiles + "";
-		
-		 PreparedStatement pstm = conn.prepareStatement(sql);
-			
-		 pstm.executeUpdate();
-		 
-		 
-		 return true;
 
-		
+			list.add(mobile);
+
+		}
+
+		return list;
+
+	}
+
+	public static boolean removeIdMobile(Connection conn, String idMobiles) throws SQLException {
+
+		String sql = "delete from mobiles where id_mobile=" + idMobiles + "";
+
+		PreparedStatement pstm = conn.prepareStatement(sql);
+
+		pstm.executeUpdate();
+
+		return true;
+
 	}
 
 	public static List<Pcs> queryPcs(Connection conn) throws SQLException {
@@ -195,11 +192,11 @@ public class DBUtils {
 
 	}
 
-	//Add new mobile to mobiles table
+	// Add new mobile to mobiles table
 	public static void insertMobiles(Connection conn) throws SQLException {
 		insertUsers(conn);
 		insertMake(conn);
-		
+
 		insertModel(conn);
 		insertSIM(conn);
 
@@ -215,13 +212,17 @@ public class DBUtils {
 			String valFclistSSn = lineFclist.getS_serial_number();
 			String valFclistMon = lineFclist.getMobile_number();
 
-			
+			String sql = "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"
+					+ valFclistMa + "'),(SELECT id_hardware_model FROM hardware_model WHERE model ='" + valFclistMo
+					+ "'),'" + valFclistI + "', '" + valFclistMs
+					+ "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + valFclistPro
+					+ "' AND serial_number ='" + valFclistSSn + "' AND mobile_number = '" + valFclistMon
+					+ "'), (SELECT id_users FROM users WHERE first_name ='" + valFclistFn + "' AND last_name ='"
+					+ valFclistLn + "'))";
 
-			 String sql = "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"+ valFclistMa +"'),(SELECT id_hardware_model FROM hardware_model WHERE model ='"+ valFclistMo +"'),'"+ valFclistI + "', '"+ valFclistMs + "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='"+ valFclistPro +"' AND serial_number ='"+ valFclistSSn +"' AND mobile_number = '"+ valFclistMon +"'), (SELECT id_users FROM users WHERE first_name ='"+ valFclistFn +"' AND last_name ='"+ valFclistLn +"'))";
-			
-			 PreparedStatement pstm = conn.prepareStatement(sql);
-			
-			 pstm.executeUpdate();
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
 
 		}
 
@@ -346,6 +347,176 @@ public class DBUtils {
 
 		} catch (SQLException e) {
 			System.out.println(e);
+		}
+
+	}
+
+	// Add new mobile to mobiles table
+	public static void addMobiles(Connection conn) throws SQLException {
+
+		// Make, add if make doens't exist
+		addMake(conn);
+		List<Mobiles> mobList = AddMobile.iAddMobileList;
+
+		for (Mobiles lineMobList : mobList) {
+
+			String make = lineMobList.getMake();
+			String model = lineMobList.getModel();
+			String imei = lineMobList.getImei();
+			String m_serial_number = lineMobList.getM_serial_number();
+			String provider = lineMobList.getProvider();
+			String s_serial_number = lineMobList.getS_serial_number();
+			String mobile_number = lineMobList.getMobile_number();
+			String first_name = lineMobList.getFirst_name();
+			String last_name = lineMobList.getLast_name();
+			String departments = lineMobList.getDepartment();
+
+			System.out.println(make);
+			System.out.println(model);
+			System.out.println(imei);
+			System.out.println(m_serial_number);
+			System.out.println(provider);
+			System.out.println(s_serial_number);
+			System.out.println(mobile_number);
+			System.out.println(first_name);
+			System.out.println(last_name);
+			System.out.println(departments);
+
+//			if (!(make.isEmpty())) {
+//
+//				String sql = "insert ignore into hardware_make(make) values('" + make + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+//
+//			if (!(model.isEmpty())) {
+//
+//				String sql = "insert ignore into hardware_model(model) values('" + model + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+//
+//			if ((!(imei.isEmpty())) || (!(m_serial_number.isEmpty()))) {
+//
+//				String sql = "insert ignore into mobiles(imei, serial_number) values('" + imei + "', '"
+//						+ m_serial_number + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+//
+//			if ((!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) || (!(mobile_number.isEmpty()))) {
+//
+//				String sql = "insert ignore into sim_cards(provider, serial_number, mobile_number) values('" + provider
+//						+ "', '" + s_serial_number + "', '" + mobile_number + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+//
+//			if ((!(first_name.isEmpty())) || (!(last_name.isEmpty()))) {
+//
+//				String sql = "insert ignore into users(first_name, last_name) values('" + first_name + "', '"
+//						+ last_name + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+//
+//			if (!(departments.isEmpty())) {
+//
+//				String sql = "insert ignore into departments(departments_name) values('" + departments + "')";
+//
+//				PreparedStatement pstm = conn.prepareStatement(sql);
+//
+//				pstm.executeUpdate();
+//			}
+
+			// if ((!(make.isEmpty())) || (!(model.isEmpty())) ||
+			// (!(imei.isEmpty())) || (!(m_serial_number.isEmpty())) ||
+			// (!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) ||
+			// (!(mobile_number.isEmpty())) || (!(first_name.isEmpty())) ||
+			// (!(last_name.isEmpty())) || (!(departments.isEmpty()))) {
+			String sql = "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"
+					+ make + "'),(SELECT id_hardware_model FROM hardware_model WHERE model ='" + model + "'),'" + imei
+					+ "', '" + m_serial_number + "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + provider
+					+ "' AND serial_number ='" + s_serial_number + "' AND mobile_number = '" + mobile_number
+					+ "'), (SELECT id_users FROM users WHERE first_name ='" + first_name + "' AND last_name ='"
+					+ last_name + "'))";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+			// }
+			/*
+			 * if (!(valFclist.isEmpty())) {
+			 * 
+			 * String sql = "insert ignore into hardware_make(make) values('" +
+			 * valFclist + "')";
+			 * 
+			 * PreparedStatement pstm = conn.prepareStatement(sql);
+			 * 
+			 * pstm.executeUpdate(); }
+			 */
+
+			/*
+			 * insertUsers(conn); insertMake(conn);
+			 * 
+			 * insertModel(conn); insertSIM(conn);
+			 * 
+			 * List<Mobiles> fcList = FileChooser.mobilesList; for (Mobiles
+			 * lineFclist : fcList) { String valFclistFn =
+			 * lineFclist.getFirst_name(); String valFclistLn =
+			 * lineFclist.getLast_name(); String valFclistMa =
+			 * lineFclist.getMake(); String valFclistMo = lineFclist.getModel();
+			 * String valFclistI = lineFclist.getImei(); String valFclistMs =
+			 * lineFclist.getM_serial_number(); String valFclistPro =
+			 * lineFclist.getProvider(); String valFclistSSn =
+			 * lineFclist.getS_serial_number(); String valFclistMon =
+			 * lineFclist.getMobile_number();
+			 * 
+			 * 
+			 * 
+			 * String sql =
+			 * "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"
+			 * + valFclistMa
+			 * +"'),(SELECT id_hardware_model FROM hardware_model WHERE model ='"
+			 * + valFclistMo +"'),'"+ valFclistI + "', '"+ valFclistMs +
+			 * "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='"+
+			 * valFclistPro +"' AND serial_number ='"+ valFclistSSn
+			 * +"' AND mobile_number = '"+ valFclistMon
+			 * +"'), (SELECT id_users FROM users WHERE first_name ='"+
+			 * valFclistFn +"' AND last_name ='"+ valFclistLn +"'))";
+			 * 
+			 * PreparedStatement pstm = conn.prepareStatement(sql);
+			 * 
+			 * pstm.executeUpdate();
+			 * 
+			 * }
+			 */
+
+		}
+	}
+
+	public static void addMake(Connection conn) throws SQLException {
+
+		HWmake makeList = AddMobile.iAddMake;
+		String make = makeList.getMake();
+
+		if (!(make.isEmpty())) {
+
+			String sql = "insert ignore into hardware_make(make) values('" + make + "')";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
 		}
 
 	}

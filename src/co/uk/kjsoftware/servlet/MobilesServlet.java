@@ -118,6 +118,15 @@ public class MobilesServlet extends HttpServlet {
 			DownloadFile downloadfile = new DownloadFile();
 
 		}
+		
+		//add mobile to mobiles
+				String buttonAddMobile = request.getParameter("exportCSV");
+
+				if ("exportCSV".equals(buttonEC)) {
+
+					DownloadFile downloadfile = new DownloadFile();
+
+				}
 
 		// read button delete value and delete row from table mobile
 		
