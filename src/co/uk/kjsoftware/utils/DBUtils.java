@@ -456,12 +456,12 @@ public class DBUtils {
 			// (!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) ||
 			// (!(mobile_number.isEmpty())) || (!(first_name.isEmpty())) ||
 			// (!(last_name.isEmpty())) || (!(departments.isEmpty()))) {
-			String sql = "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"
+			String sql = "insert into mobiles(id_hardware_make, id_hardware_model, IMEI, serial_number, id_sim_cards, id_users, id_departments) values((SELECT id_hardware_make FROM hardware_make WHERE make ='"
 					+ make + "'),(SELECT id_hardware_model FROM hardware_model WHERE model ='" + model + "'),'" + imei
 					+ "', '" + m_serial_number + "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + provider
 					+ "' AND serial_number ='" + s_serial_number + "' AND mobile_number = '" + mobile_number
 					+ "'), (SELECT id_users FROM users WHERE first_name ='" + first_name + "' AND last_name ='"
-					+ last_name + "'), (SELECT departments_name FROM departments WHERE departments_name ='" + departments + "'))";
+					+ last_name + "'), (SELECT id_departments FROM departments WHERE department_name ='" + departments + "'))";
 
 			PreparedStatement pstm = conn.prepareStatement(sql);
 
@@ -590,7 +590,7 @@ public class DBUtils {
 
 		if (!(departments.isEmpty())) {
 
-			String sql = "insert ignore into departments(departments_name)	 values('" + departments + "')";
+			String sql = "insert ignore into departments(department_name)	 values('" + departments + "')";
 
 			PreparedStatement pstm = conn.prepareStatement(sql);
 

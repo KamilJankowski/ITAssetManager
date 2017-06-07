@@ -53,6 +53,7 @@ public class AddMobile extends HttpServlet {
 		AddModelRow(request, response);
 		AddSIMRow(request, response);
 		AddUserRow(request, response);
+		AddDepartment(request, response);
 		List<Mobiles> addMobileList = new ArrayList<Mobiles>();
 		
 		String readmake = request.getParameter("make");
