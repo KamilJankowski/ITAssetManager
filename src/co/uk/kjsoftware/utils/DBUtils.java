@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import co.uk.kjsoftware.beans.Departments;
 import co.uk.kjsoftware.beans.HWmake;
 import co.uk.kjsoftware.beans.HWmodel;
 import co.uk.kjsoftware.beans.Mobiles;
@@ -356,6 +357,10 @@ public class DBUtils {
 
 		// Make, add if make doens't exist
 		addMake(conn);
+		addModel(conn);
+		addSIM(conn);
+		addUser(conn);
+		addDepartment(conn);
 		List<Mobiles> mobList = AddMobile.iAddMobileList;
 
 		for (Mobiles lineMobList : mobList) {
@@ -382,62 +387,69 @@ public class DBUtils {
 			System.out.println(last_name);
 			System.out.println(departments);
 
-//			if (!(make.isEmpty())) {
-//
-//				String sql = "insert ignore into hardware_make(make) values('" + make + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
-//
-//			if (!(model.isEmpty())) {
-//
-//				String sql = "insert ignore into hardware_model(model) values('" + model + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
-//
-//			if ((!(imei.isEmpty())) || (!(m_serial_number.isEmpty()))) {
-//
-//				String sql = "insert ignore into mobiles(imei, serial_number) values('" + imei + "', '"
-//						+ m_serial_number + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
-//
-//			if ((!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) || (!(mobile_number.isEmpty()))) {
-//
-//				String sql = "insert ignore into sim_cards(provider, serial_number, mobile_number) values('" + provider
-//						+ "', '" + s_serial_number + "', '" + mobile_number + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
-//
-//			if ((!(first_name.isEmpty())) || (!(last_name.isEmpty()))) {
-//
-//				String sql = "insert ignore into users(first_name, last_name) values('" + first_name + "', '"
-//						+ last_name + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
-//
-//			if (!(departments.isEmpty())) {
-//
-//				String sql = "insert ignore into departments(departments_name) values('" + departments + "')";
-//
-//				PreparedStatement pstm = conn.prepareStatement(sql);
-//
-//				pstm.executeUpdate();
-//			}
+			// if (!(make.isEmpty())) {
+			//
+			// String sql = "insert ignore into hardware_make(make) values('" +
+			// make + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
+			//
+			// if (!(model.isEmpty())) {
+			//
+			// String sql = "insert ignore into hardware_model(model) values('"
+			// + model + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
+			//
+			// if ((!(imei.isEmpty())) || (!(m_serial_number.isEmpty()))) {
+			//
+			// String sql = "insert ignore into mobiles(imei, serial_number)
+			// values('" + imei + "', '"
+			// + m_serial_number + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
+			//
+			// if ((!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) ||
+			// (!(mobile_number.isEmpty()))) {
+			//
+			// String sql = "insert ignore into sim_cards(provider,
+			// serial_number, mobile_number) values('" + provider
+			// + "', '" + s_serial_number + "', '" + mobile_number + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
+			//
+			// if ((!(first_name.isEmpty())) || (!(last_name.isEmpty()))) {
+			//
+			// String sql = "insert ignore into users(first_name, last_name)
+			// values('" + first_name + "', '"
+			// + last_name + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
+			//
+			// if (!(departments.isEmpty())) {
+			//
+			// String sql = "insert ignore into departments(departments_name)
+			// values('" + departments + "')";
+			//
+			// PreparedStatement pstm = conn.prepareStatement(sql);
+			//
+			// pstm.executeUpdate();
+			// }
 
 			// if ((!(make.isEmpty())) || (!(model.isEmpty())) ||
 			// (!(imei.isEmpty())) || (!(m_serial_number.isEmpty())) ||
@@ -449,7 +461,7 @@ public class DBUtils {
 					+ "', '" + m_serial_number + "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + provider
 					+ "' AND serial_number ='" + s_serial_number + "' AND mobile_number = '" + mobile_number
 					+ "'), (SELECT id_users FROM users WHERE first_name ='" + first_name + "' AND last_name ='"
-					+ last_name + "'))";
+					+ last_name + "'), (SELECT departments_name FROM departments WHERE departments_name ='" + departments + "'))";
 
 			PreparedStatement pstm = conn.prepareStatement(sql);
 
@@ -519,5 +531,70 @@ public class DBUtils {
 			pstm.executeUpdate();
 		}
 
+	}
+
+	public static void addModel(Connection conn) throws SQLException {
+
+		HWmodel modelList = AddMobile.iAddModel;
+		String model = modelList.getModel();
+
+		if (!(model.isEmpty())) {
+
+			String sql = "insert ignore into hardware_model(model) values('" + model + "')";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		}
+	}
+
+	public static void addSIM(Connection conn) throws SQLException {
+
+		SIM simList = AddMobile.iAddSIM;
+		String provider = simList.getProvider();
+		String s_serial_number = simList.getSerial_number();
+		String mobile_number = simList.getMobile_number();
+
+		if ((!(provider.isEmpty())) || (!(s_serial_number.isEmpty())) || (!(mobile_number.isEmpty()))) {
+
+			String sql = "insert ignore into sim_cards(provider, serial_number, mobile_number) values('" + provider
+					+ "', '" + s_serial_number + "', '" + mobile_number + "')";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		}
+	}
+
+	public static void addUser(Connection conn) throws SQLException {
+
+		Users user = AddMobile.iAddUser;
+		String first_name = user.getFirst_name();
+		String last_name = user.getLast_name();
+
+		if ((!(first_name.isEmpty())) || (!(last_name.isEmpty()))) {
+
+			String sql = "insert ignore into users(first_name, last_name) values('" + first_name + "', '" + last_name
+					+ "')";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		}
+	}
+
+	public static void addDepartment(Connection conn) throws SQLException {
+
+		Departments department = AddMobile.iAddDepartment;
+		String departments = department.getDepartment_name();
+
+		if (!(departments.isEmpty())) {
+
+			String sql = "insert ignore into departments(departments_name)	 values('" + departments + "')";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		}
 	}
 }
