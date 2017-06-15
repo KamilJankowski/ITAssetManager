@@ -11,6 +11,7 @@ import java.util.List;
 import co.uk.kjsoftware.beans.Departments;
 import co.uk.kjsoftware.beans.HWmake;
 import co.uk.kjsoftware.beans.HWmodel;
+import co.uk.kjsoftware.beans.MobileId;
 import co.uk.kjsoftware.beans.Mobiles;
 import co.uk.kjsoftware.beans.Pcs;
 import co.uk.kjsoftware.beans.Printers;
@@ -19,8 +20,11 @@ import co.uk.kjsoftware.beans.Users;
 import co.uk.kjsoftware.servlet.AddMobileServlet;
 import co.uk.kjsoftware.servlet.MobilesServlet;
 import co.uk.kjsoftware.utils.AddMobile;
+import co.uk.kjsoftware.servlet.EditMobileServlet;
 
 public class DBUtils {
+
+	private static final String String = null;
 
 	// Select query to display mobiles table
 	public static List<Mobiles> queryMobiles(Connection conn) throws SQLException {
@@ -105,6 +109,129 @@ public class DBUtils {
 
 		return list;
 
+	}
+
+	public static List<Mobiles> editIdMobile(Connection conn, String idMobiles) throws SQLException {
+
+		String sql = "select mobiles.id_mobile, make, model, IMEI, mobiles.serial_number, provider, sim_cards.serial_number, mobile_number, users.first_name, users.last_name, department_name"
+				+ " from mobiles" + " left join sim_cards" + " on mobiles.id_sim_cards = sim_cards.id_sim_cards"
+				+ " left join hardware_make" + " on mobiles.id_hardware_make = hardware_make.id_hardware_make"
+				+ " left join hardware_model" + " on mobiles.id_hardware_model = hardware_model.id_hardware_model"
+				+ " left join users" + " on mobiles.id_users = users.id_users" + " left join departments"
+				+ " on mobiles.id_departments = departments.id_departments where mobiles.id_mobile=" + idMobiles + "";
+
+		// String sql = "select * from mobiles where id_mobile=" + idMobiles +
+		// "";
+
+		PreparedStatement pstm = conn.prepareStatement(sql);
+
+		ResultSet rs = pstm.executeQuery();
+		List<Mobiles> list = new ArrayList<Mobiles>();
+
+		while (rs.next()) {
+			String id = rs.getString("id_mobile");
+			String make = rs.getString("make");
+			String model = rs.getString("model");
+			String imei = rs.getString("IMEI");
+			String m_serial_number = rs.getString("mobiles.serial_number");
+			String provider = rs.getString("provider");
+			String s_serial_number = rs.getString("sim_cards.serial_number");
+			String mobile_number = rs.getString("mobile_number");
+			String first_name = rs.getString("first_name");
+			String last_name = rs.getString("last_name");
+			String department_name = rs.getString("department_name");
+
+			Mobiles mobile = new Mobiles();
+
+			mobile.setId(id);
+			mobile.setMake(make);
+			mobile.setModel(model);
+			mobile.setImei(imei);
+			mobile.setM_serial_number(m_serial_number);
+			mobile.setProvider(provider);
+			mobile.setS_serial_number(s_serial_number);
+			mobile.setMobile_number(mobile_number);
+			mobile.setFirst_name(first_name);
+			mobile.setLast_name(last_name);
+			mobile.setDepartment(department_name);
+
+			list.add(mobile);
+		}
+		return list;
+	}
+
+	public static void updateMobile(Connection conn) throws SQLException {
+		addMake(conn);
+		addModel(conn);
+		addSIM(conn);
+		addUser(conn);
+		addDepartment(conn);
+		
+		List<Mobiles> mobList = AddMobile.iAddMobileList;
+
+		for (Mobiles lineMobList : mobList) {
+			
+			//MobileId mobileid = new MobileId();
+		
+			String make = lineMobList.getMake();
+			String model = lineMobList.getModel();
+			String imei = lineMobList.getImei();
+			String m_serial_number = lineMobList.getM_serial_number();
+			String provider = lineMobList.getProvider();
+			String s_serial_number = lineMobList.getS_serial_number();
+			String mobile_number = lineMobList.getMobile_number();
+			String first_name = lineMobList.getFirst_name();
+			String last_name = lineMobList.getLast_name();
+			String departments = lineMobList.getDepartment();
+
+			
+			System.out.println(make);
+			System.out.println(model);
+			System.out.println(imei);
+			System.out.println(m_serial_number);
+			System.out.println(provider);
+			System.out.println(s_serial_number);
+			System.out.println(mobile_number);
+			System.out.println(first_name);
+			System.out.println(last_name);
+			System.out.println(departments);
+
+			
+			//String idUPMobiles = EditMobileServlet.eidUPMobiles;
+			String sql = "update mobiles set id_hardware_make = (SELECT id_hardware_make FROM hardware_make WHERE make ='"
+					+ make + "'), id_hardware_model = (SELECT id_hardware_model FROM hardware_model WHERE model ='"
+					+ model + "'), imei ='" + imei + "', serial_number ='" + m_serial_number
+					+ "', id_sim_cards = (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + provider
+					+ "' AND serial_number ='" + s_serial_number + "' AND mobile_number = '" + mobile_number
+					+ "'), id_users = (SELECT id_users FROM users WHERE first_name ='" + first_name
+					+ "' AND last_name ='" + last_name
+					+ "'), id_departments = (SELECT id_departments FROM departments WHERE department_name ='"
+					+ departments + "') ";
+
+			PreparedStatement pstm = conn.prepareStatement(sql);
+
+			pstm.executeUpdate();
+		}
+
+	}
+	
+	public static List<Mobiles> getIdMobile(Connection conn, String idMobile)throws SQLException{
+		String sql = "select id_mobile from mobiles where id_mobile=" + idMobile + "";
+		
+		PreparedStatement pstm = conn.prepareStatement(sql);
+		ResultSet rs = pstm.executeQuery();
+		List<Mobiles> list = new ArrayList<Mobiles>();
+		while (rs.next()) {
+			String id = rs.getString("id_mobile");
+
+			Mobiles mobile = new Mobiles();
+			mobile.setId(id);
+
+			list.add(mobile);
+
+		}
+
+		return list;
 	}
 
 	public static boolean removeIdMobile(Connection conn, String idMobiles) throws SQLException {
@@ -461,7 +588,8 @@ public class DBUtils {
 					+ "', '" + m_serial_number + "', (SELECT id_sim_cards FROM sim_cards WHERE provider ='" + provider
 					+ "' AND serial_number ='" + s_serial_number + "' AND mobile_number = '" + mobile_number
 					+ "'), (SELECT id_users FROM users WHERE first_name ='" + first_name + "' AND last_name ='"
-					+ last_name + "'), (SELECT id_departments FROM departments WHERE department_name ='" + departments + "'))";
+					+ last_name + "'), (SELECT id_departments FROM departments WHERE department_name ='" + departments
+					+ "'))";
 
 			PreparedStatement pstm = conn.prepareStatement(sql);
 

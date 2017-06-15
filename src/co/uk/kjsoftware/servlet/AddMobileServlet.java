@@ -40,7 +40,7 @@ public class AddMobileServlet extends HttpServlet {
            throws ServletException, IOException {
  
         
-       // Forward to /WEB-INF/views/homeView.jsp
+       // Forward to /WEB-INF/views/addMobileView.jsp
        // (Users can not access directly into JSP pages placed in WEB-INF)
        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/WEB-INF/views/addMobileView.jsp");
         
