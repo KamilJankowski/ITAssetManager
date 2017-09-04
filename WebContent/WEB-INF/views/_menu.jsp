@@ -5,9 +5,9 @@
 <ul>
 	<li><a href="${pageContext.request.contextPath}/mobiles">Mobiles</a></li>
 	<li><a href="${pageContext.request.contextPath}/pcs">PCs</a></li>
-	<li><a href="#">Phones</a></li>
+	
 	<li><a href="${pageContext.request.contextPath}/printers">Printers</a></li>
-	<li><a href="#">Screens</a></li>
+	
 	
 </ul>
 

@@ -14,26 +14,20 @@
 	<jsp:include page="_header.jsp"></jsp:include>
 	<jsp:include page="_menu.jsp"></jsp:include>
 	<div class="wrapper">
-		<h3>Add Mobile</h3>
+		<h3>Add Printer</h3>
 		
 		<p style="color: red;">${errorString}</p>
-		<form action="${pageContext.request.contextPath}/addmobile"
+		<form action="${pageContext.request.contextPath}/addprinter"
 			method="post">
 			<table border="1">
 				<tr>
 					<th>Make</th>
 					<th>Model</th>
-					<th>IMEI</th>
-					<th>Mobile S/N</th>
-					<th>Provider</th>
-					<th>SIM S/N</th>
-					<th>Mobile number</th>
-					<th>First name</th>
-					<th>Last name</th>
+					<th>Hostname</th>
+					<th>IP address</th>
+					<th>S/N</th>
 					<th>Department</th>
 					<th>Add</th>
-					
-
 				</tr>
 
 				
@@ -41,16 +35,12 @@
 					<tr>
 						<td><input type="text" name="make" ></td>
 						<td><input type="text" name="model"></td>
-						<td><input type="text" name="imei"></td>
+						<td><input type="text" name="hostname"></td>
+						<td><input type="text" name="ip_address"></td>
 						<td><input type="text" name="serial_number"></td>
-						<td><input type="text" name="provider"></td>
-						<td><input type="text" name="sim_serial_number"></td>
-						<td><input type="text" name="mobile_number"></td>
-						<td><input type="text" name="first_name"></td>
-						<td><input type="text" name="last_name"></td>
 						<td><input type="text" name="department"></td>
-						<td><button type="submit" name="addMobile"
-							value="add_mobile">Add mobile</button></td>
+						<td><button type="submit" name="addprinter"
+							value="addprinter">Add Pinter</button></td>
 
 					</tr>
 

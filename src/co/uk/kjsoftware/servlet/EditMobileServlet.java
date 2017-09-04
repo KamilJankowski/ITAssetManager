@@ -24,10 +24,12 @@ import co.uk.kjsoftware.servlet.MobilesServlet;
 /**
  * Servlet implementation class EditMobileServlet
  */
-@WebServlet(urlPatterns = { "/editmobile" })
+@WebServlet("/editmobile")
 public class EditMobileServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-public static String eidUPMobiles;
+	public static String eidUPMobiles;
+	 private List<Mobiles> list;
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -44,21 +46,20 @@ public static String eidUPMobiles;
 			throws ServletException, IOException {
 
 		List<Mobiles> list = (List<Mobiles>) request.getAttribute("queryEditIdMobiles");
-		
-
 
 		// Store info in request attribute, before forward to views
 		// request.setAttribute("errorString", errorString);
 		// request.setAttribute("mobilesList", list);
 
-		// request.setAttribute("errorString", errorString);
+	
 
-		request.setAttribute("mobilesList", list);
+		request.setAttribute("mobilesList1", list);
 
 		RequestDispatcher dispatcher = this.getServletContext()
 				.getRequestDispatcher("/WEB-INF/views/editMobileView.jsp");
 
 		dispatcher.forward(request, response);
+
 	}
 
 	/**
@@ -68,43 +69,49 @@ public static String eidUPMobiles;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
+		/*String buttonUpdateMobiles = request.getParameter("updateMobile");
+		
 
+		
 		// read button delete value and delete row from table mobile
 
+		List<Mobiles> elist = null;
 		
+
+		Connection conn;
+		try {
+			conn = MySQLConnUtils.getMySQLConnection();
+			elist = DBUtils.queryIdMobile(conn);
+			
+			
+			
 		
+				for (Mobiles idmob : elist) {
+					if (idmob.getId().equals(buttonUpdateMobiles)) {
+						// String buttonAttr = (String)
+						// request.getAttribute("updateMobile");
+						//AddMobile addMobile = new AddMobile();
+					//	addMobile.AddMobileRow(request, response);
 
-		String buttonUpdateMobiles = request.getParameter("updateMobile");
-		// for (Mobiles idmob : mlist) {
-		if ("update_Mobile".equals(buttonUpdateMobiles)) {
+						//String idMobileRequest = model.getId();
+						// System.out.print(i);
+						// conn = MySQLConnUtils.getMySQLConnection();
+						//DBUtils.updateMobile(conn, idMobileRequest);
+
+						// }
+
+						// RequestDispatcher dispatcher =
+						// request.getServletContext().getRequestDispatcher("/index");
+
+						// dispatcher.forward(request, response);
+
+					}
+
+				}
 			
-			  AddMobile addMobile = new AddMobile();
-			  addMobile.AddMobileRow(request, response);
-						
-			Connection conn = null;
-			try {
-				
-				conn = MySQLConnUtils.getMySQLConnection();
-				DBUtils.updateMobile(conn);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			System.out.println("OK");
-			
-
-			// }
-
-			// RequestDispatcher dispatcher =
-			// request.getServletContext().getRequestDispatcher("/mobiles");
-
-			// dispatcher.forward(request, response);
-
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
+*/
 	}
-
 }

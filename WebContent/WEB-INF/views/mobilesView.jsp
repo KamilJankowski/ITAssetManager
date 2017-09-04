@@ -21,8 +21,8 @@
 		</form>
 		<form action="" method="post">
 
-			<input type="submit" name="importCSV" value="importCSV"> <input
-				type="submit" name="exportCSV" value="exportCSV">
+			<input type="submit" name="importCSV" value="importCSV"> 
+			<input type="submit" name="exportCSV" value="exportCSV">
 		</form>
 		<p style="color: red;">${errorString}</p>
 

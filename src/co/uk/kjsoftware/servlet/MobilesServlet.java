@@ -81,7 +81,9 @@ public class MobilesServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
+		
+		
+		
 		// import CSV file
 		String button = request.getParameter("importCSV");
 		if ("importCSV".equals(button)) {
@@ -113,17 +115,18 @@ public class MobilesServlet extends HttpServlet {
 		if ("exportCSV".equals(buttonEC)) {
 
 			DownloadFile downloadfile = new DownloadFile();
-
+			downloadfile.DownloadFileMobiles();
+			doGet(request, response);
 		}
 
-		// add mobile to mobiles
+		/*// add mobile to mobiles
 		String buttonAddMobile = request.getParameter("exportCSV");
 
 		if ("exportCSV".equals(buttonEC)) {
 
 			DownloadFile downloadfile = new DownloadFile();
 
-		}
+		}*/
 
 		// read button delete value and delete row from table mobile
 
@@ -174,7 +177,7 @@ public class MobilesServlet extends HttpServlet {
 					
 					RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/editmobile");
 
-					dispatcher.forward(request, response);
+					dispatcher.include(request, response);
 
 				}
 

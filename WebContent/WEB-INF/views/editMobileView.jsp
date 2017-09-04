@@ -17,8 +17,7 @@
 		<h3>Edit Mobile</h3>
 
 		<p style="color: red;">${errorString}</p>
-		<form action="${pageContext.request.contextPath}/editmobile"
-			method="post">
+		<form action="${pageContext.request.contextPath}/ApplyMobileServlet" method="post">
 			<table border="1">
 				<tr>
 					<th>Make</th>
@@ -37,7 +36,7 @@
 				</tr>
 
 
-				<c:forEach items="${mobilesList}" var="mobiles">
+				<c:forEach items="${mobilesList1}" var="mobiles">
 					<tr>
 						<td><input type="text" name="make" value="${mobiles.make}"></td>
 						<td><input type="text" name="model" value="${mobiles.model}"></td>
@@ -49,7 +48,7 @@
 						<td><input type="text" name="first_name" value="${mobiles.first_name}"></td>
 						<td><input type="text" name="last_name" value="${mobiles.last_name}"></td>
 						<td><input type="text" name="department" value="${mobiles.department}"></td>
-						<td><button type="submit" name="updateMobile" value="update_Mobile">Update mobile</button></td>
+						<td><button type="submit" name="updateMobile" value="${mobiles.id}">Update mobile</button></td>
 
 					</tr>
 				</c:forEach>

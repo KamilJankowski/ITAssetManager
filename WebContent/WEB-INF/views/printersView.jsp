@@ -14,7 +14,16 @@
 	<jsp:include page="_header.jsp"></jsp:include>
 	<jsp:include page="_menu.jsp"></jsp:include>
 	<div class="wrapper">
-		<h3>PCs List</h3>
+		<h3>Printers List</h3>
+		<form action="${pageContext.request.contextPath}/addprinter"
+			method="post">
+			<button type="submit" name="addprinter">Add new</button>
+		</form>
+		<form action="" method="post">
+
+			<input type="submit" name="importCSV" value="importCSV"> 
+			<input type="submit" name="exportCSV" value="exportCSV">
+		</form>
 
 		<p style="color: red;">${errorString}</p>
 
@@ -26,6 +35,8 @@
 				<th>IP address</th>
 				<th>S/N</th>
 				<th>Department</th>
+				<th>Edit</th>
+				<th>Delete</th>
 
 			</tr>
 			<c:forEach items="${printersList}" var="printers">
@@ -36,7 +47,18 @@
 					<td>${printers.ip_address}</td>
 					<td>${printers.serial_number}</td>
 					<td>${printers.department}</td>
-					
+					<td>
+						<form 	method="post">
+							<button type="submit" name="editPrinterBtn" value="${printers.id}">Edit</button>
+						</form>
+					</td>
+
+					<td>
+						<form action="${pageContext.request.contextPath}/printers"
+							method="post">
+							<button type="submit" name="delPrinterBtn" value="${printers.id}">Delete</button>
+						</form>
+					</td>
 
 				</tr>
 			</c:forEach>

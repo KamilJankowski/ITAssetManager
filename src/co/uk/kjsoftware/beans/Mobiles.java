@@ -14,6 +14,9 @@ public class Mobiles {
 	private String last_name;
 	private String department;
 	
+	private String id_sim;
+	
+
 	public Mobiles() {
 		// TODO Auto-generated constructor stub
 	}
@@ -107,6 +110,13 @@ public class Mobiles {
 
 	public void setDepartment(String department) {
 		this.department = department;
+	}
+	
+	public String getId_sim() {
+		return id_sim;
+	}
+	public void setId_sim(String id_sim) {
+		this.id_sim = id_sim;
 	}
 
 

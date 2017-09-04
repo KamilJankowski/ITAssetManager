@@ -15,7 +15,16 @@
 	<jsp:include page="_menu.jsp"></jsp:include>
 	<div class="wrapper">
 		<h3>PCs List</h3>
+		<form action="${pageContext.request.contextPath}/addpc"
+			method="post">
+			<button type="submit" name="addpc">Add new</button>
+		</form>
+		<form action="" method="post">
 
+			<input type="submit" name="importCSV" value="importCSV"> 
+			<input type="submit" name="exportCSV" value="exportCSV">
+		</form>
+	
 		<p style="color: red;">${errorString}</p>
 
 		<table border="1">
@@ -27,6 +36,8 @@
 				<th>S/N</th>
 				<th>User</th>
 				<th>Department</th>
+				<th>Edit</th>
+				<th>Delete</th>
 
 			</tr>
 			<c:forEach items="${pcsList}" var="pcs">
@@ -38,6 +49,18 @@
 					<td>${pcs.serial_number}</td>
 					<td>${pcs.user}</td>
 					<td>${pcs.department}</td>
+					<td>
+						<form 	method="post">
+							<button type="submit" name="editPCBtn" value="${pcs.id}">Edit</button>
+						</form>
+					</td>
+
+					<td>
+						<form action="${pageContext.request.contextPath}/pcs"
+							method="post">
+							<button type="submit" name="delPCBtn" value="${pcs.id}">Delete</button>
+						</form>
+					</td>
 					
 
 				</tr>
